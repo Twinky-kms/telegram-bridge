@@ -1,0 +1,29 @@
+{
+  "name": "dingo-tele-bridge",
+  "version": "1.0.0",
+  "description": "Telegram-to-Telegram bridge service for forwarding messages between channels",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "keywords": [
+    "telegram",
+    "bridge",
+    "bot"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "telegraf": "^4.15.6",
+    "dotenv": "^16.4.5",
+    "winston": "^3.11.0",
+    "@google-cloud/translate": "^8.3.0",
+    "node-fetch": "^2.6.7"
+  },
+  "optionalDependencies": {
+    "https-proxy-agent": "^7.0.5"
+  }
+}
+
