@@ -15,7 +15,7 @@ class MessageProcessor {
    * @returns {Promise<string>} - Formatted message text
    */
   async process(bridgeMessage) {
-    const { author, text, replyToId } = bridgeMessage;
+    const { author, text } = bridgeMessage;
 
     const authorDisplay = author || 'Unknown';
 
@@ -68,10 +68,6 @@ class MessageProcessor {
 
     if (this.config?.getTranslationShowOriginal() && this.config?.getTranslationEnabled()) {
       formattedText = `${formattedText}\nOriginal: ${text}`;
-    }
-
-    if (replyToId) {
-      formattedText = `Replying to message ${replyToId}\n${formattedText}`;
     }
 
     return formattedText;

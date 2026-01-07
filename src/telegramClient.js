@@ -60,19 +60,18 @@ class TelegramClient {
     this.bot.use(async (ctx, next) => {
       if (ctx.message) {
         console.log('Message received from Telegram:', ctx.message);
-        try {
-          this.logger.info('Message received from Telegram:', {
-            chatId: String(ctx.message?.chat?.id),
-            chatType: ctx.message?.chat?.type,
-            hasText: !!ctx.message?.text,
-            isCommand: ctx.message?.text?.startsWith('/'),
-            messageText: ctx.message?.text ? ctx.message.text.substring(0, 50) : 'non-text',
-          });
-          await onUpdate(ctx);
-        } catch (error) {
+        this.logger.info('Message received from Telegram:', {
+          chatId: String(ctx.message?.chat?.id),
+          chatType: ctx.message?.chat?.type,
+          hasText: !!ctx.message?.text,
+          isCommand: ctx.message?.text?.startsWith('/'),
+          messageText: ctx.message?.text ? ctx.message.text.substring(0, 50) : 'non-text',
+        });
+        // Don't await - process messages asynchronously to avoid blocking
+        onUpdate(ctx).catch((error) => {
           this.logger.error('Error handling update:', error);
           this.logger.error('Error stack:', error.stack);
-        }
+        });
       }
       return next();
     });

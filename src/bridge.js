@@ -86,17 +86,42 @@ class Bridge {
       }
     }
 
-    let replyToId = null;
-    if (message.reply_to_message) {
-      replyToId = message.reply_to_message.message_id;
+    // Process message text to handle entities (mentions, etc.)
+    let processedText = message.text;
+    if (message.entities && Array.isArray(message.entities)) {
+      // Process entities in reverse order to maintain correct indices
+      const sortedEntities = [...message.entities].sort((a, b) => b.offset - a.offset);
+      
+      for (const entity of sortedEntities) {
+        if (entity.type === 'mention') {
+          // Mentions are already in the text as @username, keep them as is
+          continue;
+        } else if (entity.type === 'text_mention') {
+          // Text mention with user object - replace with username if available
+          const user = entity.user;
+          const mentionText = message.text.substring(entity.offset, entity.offset + entity.length);
+          let replacement = mentionText;
+          
+          if (user) {
+            if (user.username) {
+              replacement = `@${user.username}`;
+            } else if (user.first_name || user.last_name) {
+              replacement = [user.first_name, user.last_name].filter(Boolean).join(' ');
+            }
+          }
+          
+          processedText = processedText.substring(0, entity.offset) + 
+                         replacement + 
+                         processedText.substring(entity.offset + entity.length);
+        }
+      }
     }
 
     return {
       id: message.message_id,
       chatId: messageChatId,
       author: author,
-      text: message.text,
-      replyToId: replyToId,
+      text: processedText,
       timestamp: message.date,
     };
   }
