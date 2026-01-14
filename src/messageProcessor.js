@@ -64,10 +64,10 @@ class MessageProcessor {
       }
     }
 
-    let formattedText = `[From CN] ${authorDisplay}: ${outputText}`;
+    let formattedText = `【CN】 ${authorDisplay}\n${outputText}`;
 
     if (this.config?.getTranslationShowOriginal() && this.config?.getTranslationEnabled()) {
-      formattedText = `${formattedText}\nOriginal: ${text}`;
+      formattedText = `${formattedText}\n\n━ Original: ${text}`;
     }
 
     return formattedText;
